@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <ul>
-        <li className="navbar__title">myMoney</li>
+        <li className="navbar__title">Reading List</li>
         <li>
           <Link to="/login">Login</Link>
         </li>

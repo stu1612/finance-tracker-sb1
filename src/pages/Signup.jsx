@@ -1,44 +1,38 @@
 // npm
 import { useState } from "react";
 
+// files
+import form from "../data/form.json";
+import InputField from "../components/InputField";
+import useSignup from "../hooks/useSignup";
+
 export default function Signup() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const { createUser, error, loading } = useSignup();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    createUser(email, password, displayName);
+    setEmail("");
+    setPassword("");
+    setDisplayName("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="form">
-      <h2>login</h2>
-      <label>
-        <span>name:</span>
-        <input
-          type="email"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-      </label>
-      <label>
-        <span>email:</span>
-        <input
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-      </label>
-      <label>
-        <span>password:</span>
-        <input
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-      </label>
-      <button className="btn">Login</button>
+      {!loading ? <h2>Login</h2> : <h2>Loading</h2>}
+      <InputField setup={form.email} state={[email, setEmail]} />
+      <InputField setup={form.password} state={[password, setPassword]} />
+      <InputField setup={form.name} state={[displayName, setDisplayName]} />
+      {!loading && <button className="btn">Signup</button>}
+      {loading && (
+        <button className="btn" disabled>
+          Signup
+        </button>
+      )}
+      {error && <p>{error}</p>}
     </form>
   );
 }
