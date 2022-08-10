@@ -1,12 +1,13 @@
 // npm
 import { useState } from "react";
 import { auth } from "../firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import useAuthContext from "./useAuthContext";
 
 export default function useSignup() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { dispatch } = useAuthContext();
 
   async function createUser(email, password, displayName) {
     setError(null);
@@ -21,8 +22,10 @@ export default function useSignup() {
       }
 
       // add display name
-      // await res.user.updateProfile({ displayName });
       await updateProfile(auth.currentUser, { displayName });
+
+      //dispatch login action
+      dispatch({ type: "LOGIN", payload: auth.currentUser });
       setError(null);
       setLoading(false);
     } catch (err) {
