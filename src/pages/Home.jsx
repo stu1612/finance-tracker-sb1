@@ -1,5 +1,12 @@
-import { useState } from "react";
+import TransactionForm from "../components/TransactionForm";
 
 export default function Home() {
-  return <div>books</div>;
+  return (
+    <div className="container">
+      <div className="content">Transaction list</div>
+      <div className="sidebar">
+        <TransactionForm />
+      </div>
+    </div>
+  );
 }

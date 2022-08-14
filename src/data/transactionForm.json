@@ -1,0 +1,16 @@
+{
+  "name": {
+    "span": "transaction name",
+    "placeholder": "name",
+    "type": "text",
+    "required": true,
+    "autofocus": true
+  },
+  "amount": {
+    "span": "amount ($)",
+    "placeholder": "amount",
+    "type": "number",
+    "required": true,
+    "autofocus": false
+  }
+}

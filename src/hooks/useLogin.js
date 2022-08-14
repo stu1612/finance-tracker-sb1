@@ -1,39 +1,32 @@
 // npm
 import { useState, useEffect } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+// files
 import { auth } from "../firebase/firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import useAuthContext from "./useAuthContext";
 
-export default function useSignup() {
+export default function useLogin() {
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { dispatch } = useAuthContext();
 
-  async function signup(email, password, displayName) {
+  async function login(email, password) {
     setError(null);
     setLoading(true);
-
     try {
-      // register new user
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      if (!res) {
-        throw new Error("Could not complete signup");
-      }
-
-      // add display name
-      await updateProfile(auth.currentUser, { displayName });
-
-      //dispatch login action
-      dispatch({ type: "LOGIN", payload: auth.currentUser });
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      // dispatch action
+      dispatch({ type: "LOGIN", payload: res.user });
+      // safeguard
       if (!isCancelled) {
         setError(null);
         setLoading(false);
       }
     } catch (err) {
       if (!isCancelled) {
-        console.error(err.message);
+        console.log(err.message);
         setError(err.message);
         setLoading(false);
       }
@@ -44,5 +37,5 @@ export default function useSignup() {
     return () => setIsCancelled(true);
   }, []);
 
-  return { signup, error, loading };
+  return { login, error, loading };
 }
