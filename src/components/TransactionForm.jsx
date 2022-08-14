@@ -2,18 +2,21 @@
 import { useState } from "react";
 
 // files
+import useCollection from "../hooks/useCollection";
 import InputField from "./InputField";
 import form from "../data/transactionForm.json";
 
-export default function TransactionForm() {
+export default function TransactionForm({ uid }) {
   // local state
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
 
+  const { addDocument, response } = useCollection("transactions");
+
   // methods
   function handleSubmit(event) {
     event.preventDefault();
-    console.log({ name, amount });
+    addDocument({ uid, name, amount });
   }
 
   return (
