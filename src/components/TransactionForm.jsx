@@ -1,8 +1,8 @@
 // npm
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // files
-import useCollection from "../hooks/useCollection";
+import useFirebase from "../hooks/useFirebase";
 import InputField from "./InputField";
 import form from "../data/transactionForm.json";
 
@@ -11,13 +11,21 @@ export default function TransactionForm({ uid }) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
 
-  const { addDocument, response } = useCollection("transactions");
+  const { addDocument, response } = useFirebase("transactions");
 
   // methods
   function handleSubmit(event) {
     event.preventDefault();
     addDocument({ uid, name, amount });
   }
+
+  // reset form
+  useEffect(() => {
+    if (response.success) {
+      setName("");
+      setAmount("");
+    }
+  }, [response.success]);
 
   return (
     <>
